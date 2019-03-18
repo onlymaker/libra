@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{@dict['index_title']}}</title>
+    <include href="common/header.html"/>
+    <style>
+        .fa-hand-o-right {
+            color: #007bff;
+            cursor: pointer;
+        }
+        .fa-warning {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+<include href="common/navbar.html"/>
+<table class="table table-stripped">
+    <thead class="thead-dark">
+    <tr>
+        <th>Thumb</th>
+        <th>Email</th>
+        <th>Ranking</th>
+        <th>Created Time</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+    <repeat group="{{@data}}" value="{{@item}}">
+        <tr>
+            <td><img alt="thumb" class="img" src="{{@item['json']['images']}}?imageView2/0/w/100"/></td>
+            <td>{{@item['email']}}</td>
+            <td>{{@item['ranking']}}</td>
+            <td>{{@item['create_time']}}</td>
+            <check if="{{@item['status']}}">
+                <true>
+                    <td>Finish</td>
+                </true>
+                <false>
+                    <td><i class="fa fa-hand-o-right" data-id="{{@item['id']}}">&nbsp;Shipping</i></td>
+                </false>
+            </check>
+        </tr>
+    </repeat>
+</table>
+<nav>
+    <ul class="pagination justify-content-center"></ul>
+</nav>
+<div id="shipping-confirm" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fa fa-warning">&nbsp;Note</i></h5>
+            </div>
+            <div class="modal-body">Sure to confirm? The status cannot be rollback.</div>
+            <div class="modal-footer">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline-secondary" id="shipping-confirm-cancel">Cancel</button>
+                    <button type="button" class="btn btn-outline-primary" id="shipping-confirm-btn">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    function setStatus(obj, status) {
+        switch (status) {
+            case "request":
+                obj.removeClass("fa-hand-o-right").addClass("fa-spinner fa-pulse animated").html("");
+                break;
+            case "rollback":
+                obj.removeClass("fa-spinner fa-pulse animated").addClass("fa-hand-o-right").html("&nbsp;Shipping");
+                break;
+            case "finish":
+                obj.removeClass("fa-spinner fa-pulse animated").html("Finish");
+                break;
+        }
+    }
+
+    $(function () {
+        let obj = {};
+        let options = {};
+        if ("{{@status}}") {
+            options.status = status;
+        }
+
+        $("ul.pagination").append(pagination("{{@BASE}}/admin/customer", "{{@pageNo}}", "{{@pageCount}}", options));
+
+        $(".fa-hand-o-right").on("click", function () {
+            obj = $(this);
+            setStatus(obj, "request");
+            $("#shipping-confirm").modal({
+                show: true,
+                backdrop: "static",
+            });
+        });
+
+        $("#shipping-confirm-cancel").on("click", function () {
+            $("#shipping-confirm").modal("hide");
+            setStatus(obj, "rollback");
+        });
+
+        $("#shipping-confirm-btn").on("click", function () {
+            $("#shipping-confirm").modal("hide");
+            fetch("{{@BASE}}/admin/customer/finish?id=" + obj.data("id"))
+                .then(function (response) {
+                    return response.text();
+                })
+                .then(function (text) {
+                    if (text === "success") {
+                        setStatus(obj, "finish");
+                    } else {
+                        throw new Error("failure");
+                    }
+                })
+                .catch(function (...args) {
+                    setStatus(obj, "rollback");
+                    generalCallback(...args);
+                });
+        });
+    })
+</script>
+</html>

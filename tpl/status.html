@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Invitation</title>
+    <include href="common/header.html"/>
+    <style>
+        html, body {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+<div class="text">
+</div>
+</body>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let email = getCookie("email");
+        let status = getCookie("status");
+        let ranking = getCookie("ranking");
+        let prev = getCookie("prev");
+        let e = document.querySelector("div.text");
+        if (status === "0") {
+            e.innerHTML = "Dear&nbsp;" + email + "<br/>" +
+                "Your rank is&nbsp;" + ranking + "<br/>" +
+                "Still need to waiting&nbsp;" + prev + "&nbsp;days";
+        } else {
+            e.innerHTML = "You already taken";
+        }
+    })
+</script>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Invitation</title>
+    <include href="common/header.html"/>
+    <style>
+        html, body {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        button {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+<div class="input-group">
+    <div class="input-group-prepend">
+        <div class="input-group-text">Invite Code</div>
+    </div>
+    <input id="code-input" class="form-control"/>
+    <button id="next-btn" class="btn btn-primary btn-block">Next</button>
+</div>
+</body>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let btn = document.getElementById("next-btn");
+        btn.addEventListener("click", function () {
+            let input = document.getElementById("code-input");
+            let code = input.value;
+            if (!code) {
+                alert("Invite code required");
+                return input.focus();
+            }
+            fetch("{{@BASE}}/check/code", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: buildQuery({code: code}),
+            })
+                .then(function (response) {
+                    return response.text();
+                })
+                .then(function (text) {
+                    switch (text) {
+                        case "success":
+                            location.href = "{{@BASE}}/status";
+                            break;
+                        case "expired":
+                            alert("Invite code already used");
+                            input.focus();
+                            break;
+                        case "reject":
+                        default:
+                            alert("Invalid invite code\nPlease check again");
+                            input.focus();
+                    }
+                })
+                .catch(generalCallback)
+                .finally(function () {
+                    btn.removeAttribute("disabled");
+                });
+        })
+    })
+</script>
+</html>

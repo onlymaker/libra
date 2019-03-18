@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome</title>
+    <include href="common/header.html"/>
+    <style>
+        .alert {
+            border-radius: 0;
+            margin-bottom: 0;
+            font-size: 0.5rem;
+        }
+        .close {
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+<div class="alert alert-secondary alert-dismissible fade show" role="alert">
+    <strong>Important:&nbsp;</strong>we uses cookies for personalized content. By continuing to browse this site, you agree to this use.
+    <button type="button" class="close" data-dismiss="alert">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<input id="email-input" class="form-control" type="email" name="email"/>
+<button id="email-btn" class="btn btn-primary">Next</button>
+</body>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let email = getCookie("email");
+        if (email) {
+            document.getElementById("email-input").value = email;
+        }
+        let btn = document.getElementById("email-btn");
+        btn.addEventListener("click", function () {
+            let input = document.getElementById("email-input");
+            let email = input.value;
+            if (!email) {
+                alert("Email required");
+                return input.focus();
+            }
+            if(!navigator.cookieEnabled) {
+                return alert("Please enable cookies to continue");
+            }
+            btn.setAttribute("disabled", "disabled");
+            fetch("{{@BASE}}/check/email", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: buildQuery({email: email}),
+            })
+                .then(function (response) {
+                    return response.text();
+                })
+                .then(function (text) {
+                    switch (text) {
+                        case "success":
+                            location.href = "{{@BASE}}/status";
+                            break;
+                        case "next":
+                            location.href = "{{@BASE}}/next";
+                            break;
+                        case "reject":
+                        default:
+                            alert("Invalid email address\nPlease check again");
+                            input.focus();
+                    }
+                })
+                .catch(generalCallback)
+                .finally(function () {
+                    btn.removeAttribute("disabled");
+                });
+        })
+    })
+</script>
+</html>
