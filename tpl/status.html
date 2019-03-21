@@ -14,8 +14,7 @@
     </style>
 </head>
 <body>
-<div class="text">
-</div>
+<img class="img-fluid mb-5" src="{{@BASE}}/img/status.jpg"/>
 </body>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -23,14 +22,15 @@
         let status = getCookie("status");
         let ranking = getCookie("ranking");
         let prev = getCookie("prev");
-        let e = document.querySelector("div.text");
+        let html = "";
         if (status === "0") {
-            e.innerHTML = "Dear&nbsp;" + email + "<br/>" +
-                "Your rank is&nbsp;" + ranking + "<br/>" +
-                "Still need to waiting&nbsp;" + prev + "&nbsp;days";
+            html += '<h3 class="text-danger">Ranking:&nbsp;' + ranking + '</h3>';
+            html += '<p class="text-secondary">Still &nbsp;' + prev + '&nbsp;persons waiting before you</p>';
         } else {
-            e.innerHTML = "You already taken";
+            html += '<p class="text-secondary">Congratulations! You already taken the shoes.</p>';
         }
+        let o = document.querySelector(".img-fluid");
+        o.insertAdjacentHTML("AfterEnd", html);
     })
 </script>
 </html>

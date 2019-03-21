@@ -4,29 +4,38 @@
     <title>Invitation</title>
     <include href="common/header.html"/>
     <style>
-        html, body {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        @media screen and (max-device-width:480px) {
+            .m {
+                display: flex;
+            }
+            .l {
+                display: none;
+            }
         }
-        button {
-            margin-top: 1rem;
+        @media screen and (min-device-width:480px) {
+            .m {
+                display: none;
+            }
+            .l {
+                display: flex;
+            }
         }
     </style>
 </head>
 <body>
-<div class="input-group">
-    <div class="input-group-prepend">
-        <div class="input-group-text">Invite Code</div>
+<div class="container">
+    <img class="img-fluid m" src="{{@BASE}}/img/post-m.jpg"/>
+    <img class="img-fluid l" src="{{@BASE}}/img/post.jpg"/>
+    <div class="form-group mt-2 mb-2">
+        <input type="text" readonly class="form-control-plaintext"/>
+        <input class="form-control" id="code-input" placeholder="Please input your code"/>
     </div>
-    <input id="code-input" class="form-control"/>
-    <button id="next-btn" class="btn btn-primary btn-block">Next</button>
+    <button class="btn btn-primary btn-block mb-2" id="next-btn">Next</button>
 </div>
 </body>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+        document.querySelector(".form-control-plaintext").value = getCookie("email");
         let btn = document.getElementById("next-btn");
         btn.addEventListener("click", function () {
             let input = document.getElementById("code-input");

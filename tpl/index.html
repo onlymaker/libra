@@ -4,10 +4,26 @@
     <title>Welcome</title>
     <include href="common/header.html"/>
     <style>
+        @media screen and (max-device-width:480px) {
+            .m {
+                display: flex;
+            }
+            .l {
+                display: none;
+            }
+        }
+        @media screen and (min-device-width:480px) {
+            .m {
+                display: none;
+            }
+            .l {
+                display: flex;
+            }
+        }
         .alert {
             border-radius: 0;
             margin-bottom: 0;
-            font-size: 0.5rem;
+            font-size: 0.75rem;
         }
         .close {
             font-size: 0.9rem;
@@ -21,8 +37,14 @@
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
-<input id="email-input" class="form-control" type="email" name="email"/>
-<button id="email-btn" class="btn btn-primary">Next</button>
+<div class="container">
+    <img class="img-fluid m" src="{{@BASE}}/img/post-m.jpg"/>
+    <img class="img-fluid l" src="{{@BASE}}/img/post.jpg"/>
+    <div class="form-group mt-2 mb-2">
+        <input class="form-control" id="email-input" placeholder="Input your email"/>
+    </div>
+    <button class="btn btn-primary btn-block mb-2" id="email-btn">Next</button>
+</div>
 </body>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
