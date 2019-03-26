@@ -13,6 +13,5 @@ create table customer
   code        varchar(50)  not null,
   data        json,
   create_time timestamp default current_timestamp,
-  unique index (email),
-  unique index (code)
+  unique index (email)
 );

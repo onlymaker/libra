@@ -20,6 +20,9 @@
                 display: flex;
             }
         }
+        #next-btn {
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -27,10 +30,10 @@
     <img class="img-fluid m" src="{{@BASE}}/img/post-m.jpg"/>
     <img class="img-fluid l" src="{{@BASE}}/img/post.jpg"/>
     <div class="form-group mt-2 mb-2">
-        <input type="text" readonly class="form-control-plaintext"/>
+        <input type="text" readonly class="form-control-plaintext text-warning"/>
         <input class="form-control" id="code-input" placeholder="Please input your code"/>
     </div>
-    <button class="btn btn-primary btn-block mb-2" id="next-btn">Next</button>
+    <button class="btn btn-warning btn-block mb-2" id="next-btn">Next</button>
 </div>
 </body>
 <script>

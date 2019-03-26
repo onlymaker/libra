@@ -18,7 +18,6 @@
 <table class="table table-stripped">
     <thead class="thead-dark">
     <tr>
-        <th>Thumb</th>
         <th>Email</th>
         <th>Ranking</th>
         <th>Created Time</th>
@@ -27,7 +26,6 @@
     </thead>
     <repeat group="{{@data}}" value="{{@item}}">
         <tr>
-            <td><img alt="thumb" class="img" src="{{@item['json']['images']}}?imageView2/0/w/100"/></td>
             <td>{{@item['email']}}</td>
             <td>{{@item['ranking']}}</td>
             <td>{{@item['create_time']}}</td>

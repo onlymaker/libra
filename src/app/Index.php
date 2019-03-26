@@ -7,6 +7,8 @@ use db\SqlMapper;
 
 class Index extends AppBase
 {
+    const CODE = 'W0399';
+
     function get()
     {
         echo \Template::instance()->render('index.html');
@@ -25,34 +27,22 @@ class Index extends AppBase
     function checkCode(\Base $f3)
     {
         $code = $f3->get('POST.code');
-        $customer = new SqlMapper('customer');
-        $customer->load(['code=?', $code]);
-        if ($customer->dry()) {
-            $response = \Web::instance()->request('https://oms.onlymaker.cn/api/Trace?' . http_build_query(['id' => $code]));
-            if ($response['headers'][0] == 'HTTP/1.1 200 OK') {
-                $body = $response['body'];
-                $result = json_decode($body);
-                if ($result->error === 0) {
-                    $customer = new SqlMapper('customer');
-                    $customer->maxRanking = 'max(ranking)';
-                    $customer->load();
-                    $ranking = ($customer->dry()) ? 1 : $customer['maxRanking'] + 1;
-                    $customer->reset();
-                    $customer['email'] = $f3->get('COOKIE.email');
-                    $customer['ranking'] = $ranking;
-                    $customer['code'] = $code;
-                    $customer['data'] = $body;
-                    $customer->save();
-                    $this->setCustomer($customer);
-                    echo 'success';
-                    return;
-                }
-            }
+        if (strcasecmp(self::CODE, $code) === 0) {
+            $customer = new SqlMapper('customer');
+            $customer->maxRanking = 'max(ranking)';
+            $customer->load();
+            $ranking = ($customer->dry()) ? 1 : $customer['maxRanking'] + 1;
+            $customer->reset();
+            $customer['email'] = $f3->get('COOKIE.email');
+            $customer['ranking'] = $ranking;
+            $customer['code'] = $code;
+            $customer['data'] = json_encode([]);
+            $customer->save();
+            $this->setCustomer($customer);
+            echo 'success';
         } else {
-            echo 'expired';
-            return;
+            echo 'reject';
         }
-        echo 'reject';
     }
 
     function checkEmail(\Base $f3)
@@ -79,9 +69,8 @@ class Index extends AppBase
             setcookie($key, $value, 0, '/');
         }
         $ranking = $fields['ranking'];
-        $customer->prev = 'count(*)';
-        $customer->load(['ranking<=? and status=0', $ranking]);
-        setcookie('prev', $customer['prev'], 0, '/');
+        setcookie('prev', $customer->count(['ranking<=? and status=0', $ranking]), 0, '/');
+        setcookie('next', $customer->count(['ranking>?', $ranking]), 0, '/');
     }
 
     function beforeRoute(\Base $f3)
