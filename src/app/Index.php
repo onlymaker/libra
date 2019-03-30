@@ -69,7 +69,7 @@ class Index extends AppBase
             setcookie($key, $value, 0, '/');
         }
         $ranking = $fields['ranking'];
-        setcookie('prev', $customer->count(['ranking<=? and status=0', $ranking]), 0, '/');
+        setcookie('prev', $customer->count(['ranking<? and status=0', $ranking]), 0, '/');
         setcookie('next', $customer->count(['ranking>?', $ranking]), 0, '/');
     }
 

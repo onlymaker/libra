@@ -15,6 +15,7 @@
 </head>
 <body>
 <img class="img-fluid mb-5" src="{{@BASE}}/img/status.jpg"/>
+<div class="status"></div>
 </body>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -22,15 +23,21 @@
         let status = getCookie("status");
         let ranking = getCookie("ranking");
         let prev = getCookie("prev");
+        let next = getCookie("next");
         let html = "";
         if (status === "0") {
+            if (prev > 0) {
+                html += '<p class="text-secondary">Before you:&nbsp;' + prev + '</p>';
+            }
             html += '<h3 class="text-danger">Ranking:&nbsp;' + ranking + '</h3>';
-            html += '<p class="text-secondary">Still &nbsp;' + prev + '&nbsp;persons waiting before you</p>';
+            if (next > 0) {
+                html += '<p class="text-secondary">After your:&nbsp;' + next + '</p>';
+            }
         } else {
-            html += '<p class="text-secondary">Congratulations! You already taken the shoes.</p>';
+            html += '<p class="text-secondary">Congratulations! You already earned the free shoes.</p>';
         }
-        let o = document.querySelector(".img-fluid");
-        o.insertAdjacentHTML("AfterEnd", html);
+        let o = document.querySelector(".status");
+        o.insertAdjacentHTML("BeforeEnd", html);
     })
 </script>
 </html>
