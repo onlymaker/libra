@@ -19,10 +19,6 @@
         "0": {
             "type": "vcs",
             "url": "https://github.com/syncxplus/fatfree"
-        },
-        "packagist": {
-            "type": "composer",
-            "url": "https://packagist.phpcomposer.com"
         }
     }
 }
