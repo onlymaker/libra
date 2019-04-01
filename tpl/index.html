@@ -82,10 +82,10 @@
                 .then(function (text) {
                     switch (text) {
                         case "success":
-                            location.href = "{{@BASE}}/status";
+                            location.href = "{{@BASE}}/status?email=" + email;
                             break;
                         case "next":
-                            location.href = "{{@BASE}}/next";
+                            location.href = "{{@BASE}}/next?email=" + email;
                             break;
                         case "reject":
                         default:

@@ -19,11 +19,11 @@
 </body>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        let email = getCookie("email");
-        let status = getCookie("status");
-        let ranking = getCookie("ranking");
-        let prev = getCookie("prev");
-        let next = getCookie("next");
+        let email = "{{@customer['email']}}";
+        let status = "{{@customer['status']}}";
+        let ranking = "{{@customer['ranking']}}";
+        let prev = "{{@prev}}";
+        let next = "{{@next}}";
         let html = "";
         if (status === "0") {
             if (prev > 0) {
