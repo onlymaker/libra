@@ -4,7 +4,7 @@
     <title>{{@dict['index_title']}}</title>
     <include href="common/header.html"/>
     <style>
-        .fa-hand-o-right {
+        .fa-clock-o {
             color: #007bff;
             cursor: pointer;
         }
@@ -34,7 +34,7 @@
                     <td>Finish</td>
                 </true>
                 <false>
-                    <td><i class="fa fa-hand-o-right" data-id="{{@item['id']}}">&nbsp;Shipping</i></td>
+                    <td><i class="fa fa-clock-o" data-id="{{@item['id']}}">&nbsp;Waiting</i></td>
                 </false>
             </check>
         </tr>
@@ -64,10 +64,10 @@
     function setStatus(obj, status) {
         switch (status) {
             case "request":
-                obj.removeClass("fa-hand-o-right").addClass("fa-spinner fa-pulse animated").html("");
+                obj.removeClass("fa-clock-o").addClass("fa-spinner fa-pulse animated").html("");
                 break;
             case "rollback":
-                obj.removeClass("fa-spinner fa-pulse animated").addClass("fa-hand-o-right").html("&nbsp;Shipping");
+                obj.removeClass("fa-spinner fa-pulse animated").addClass("fa-clock-o").html("&nbsp;Waiting");
                 break;
             case "finish":
                 obj.removeClass("fa-spinner fa-pulse animated").html("Finish");
@@ -84,7 +84,7 @@
 
         $("ul.pagination").append(pagination("{{@BASE}}/admin/customer", "{{@pageNo}}", "{{@pageCount}}", options));
 
-        $(".fa-hand-o-right").on("click", function () {
+        $(".fa-clock-o").on("click", function () {
             obj = $(this);
             setStatus(obj, "request");
             $("#shipping-confirm").modal({
