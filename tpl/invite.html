@@ -21,7 +21,13 @@
             }
         }
         #next-btn {
+            background-color: #cc9933;
+            border: #cc9933;
             color: white;
+        }
+        .text-warning {
+            color: #cc9933;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -31,7 +37,7 @@
     <img class="img-fluid l" src="{{@BASE}}/img/post.jpg"/>
     <div class="form-group mt-2 mb-2">
         <input type="text" readonly class="form-control-plaintext text-warning"/>
-        <input class="form-control" id="code-input" placeholder="Please input your code"/>
+        <input class="form-control" id="code-input" placeholder="Invitation code"/>
     </div>
     <button class="btn btn-warning btn-block mb-2" id="next-btn">Next</button>
 </div>
@@ -63,12 +69,12 @@
                             location.href = "{{@BASE}}/status";
                             break;
                         case "expired":
-                            alert("Invite code already used");
+                            alert("Invitation code expired");
                             input.focus();
                             break;
                         case "reject":
                         default:
-                            alert("Invalid invite code\nPlease check again");
+                            alert("Invitation code invalid\nPlease check again");
                             input.focus();
                     }
                 })
