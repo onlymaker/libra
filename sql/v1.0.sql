@@ -15,3 +15,14 @@ create table customer
   create_time timestamp default current_timestamp,
   unique index (email)
 );
+
+drop table if exists  admin;
+create table admin
+(
+  id          int unsigned not null auto_increment primary key,
+  username    varchar(50)  not null,
+  password    varchar(50)  not null,
+  create_time timestamp default current_timestamp,
+  unique index (username)
+);
+#insert into admin (username, password) values ('username', md5('password'));
